@@ -19,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,53 +42,84 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import com.mmur.cursocompose.todoapp.addtasks.ui.model.TaskModel
 import com.mmur.cursocompose.todoapp.ui.theme.primaryGreen
 import com.mmur.cursocompose.todoapp.ui.theme.secondaryWhite
 
 @Composable
 fun TasksScreen(taskViewModel: TaskViewModel, modifier: Modifier) {
-    Box(modifier = modifier.fillMaxSize()) {
+    val lifeCycle = LocalLifecycleOwner.current.lifecycle
 
-        val showDialog: Boolean by taskViewModel.showDialog.observeAsState(false)
-        if (showDialog) {
-            AddTaskDialog(
-                true,
-                onDismiss = { taskViewModel.onDialogClose() },
-                onTaskAdded = { taskViewModel.onTaskCreated(it) })
+    val uiState by produceState<TaskUiState>(
+        initialValue = TaskUiState.Loading,
+        key1 = lifeCycle,
+        key2 = taskViewModel
+    ) {
+        lifeCycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            taskViewModel.taskState.collect { value = it }
         }
-        TasksList(taskViewModel)
-        FabDialog(
-            onClickFab = { taskViewModel.onShowDialogClick() },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        )
+
     }
+    when (uiState) {
+        is TaskUiState.Error -> {
+
+        }
+
+        is TaskUiState.Loading -> {
+            CircularProgressIndicator()
+        }
+
+        is TaskUiState.Success -> {
+            Box(modifier = modifier.fillMaxSize()) {
+
+                val showDialog: Boolean by taskViewModel.showDialog.observeAsState(false)
+                if (showDialog) {
+                    AddTaskDialog(
+                        true,
+                        onDismiss = { taskViewModel.onDialogClose() },
+                        onTaskAdded = { taskViewModel.onTaskCreated(it) })
+                }
+                TasksList((uiState as TaskUiState.Success).tasks)
+                FabDialog(
+                    onClickFab = { taskViewModel.onShowDialogClick() },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                )
+            }
+        }
+    }
+
+
 }
 
 @Composable
-fun TasksList(taskViewmodel: TaskViewModel) {
-    val myTasks: List<TaskModel> = taskViewmodel.tasks
+fun TasksList(myTasks: List<TaskModel>) {
     LazyColumn {
         items(
             count = myTasks.size,
             key = { index -> myTasks[index].id },
             contentType = { "task" }) {
-            TaskItem(myTasks[it], taskViewmodel)
+            TaskItem(myTasks[it]  )
         }
     }
 }
 
 @Composable
-fun TaskItem(task: TaskModel, taskViewModel: TaskViewModel) {
+fun TaskItem(task: TaskModel, taskViewModel: TaskViewModel = hiltViewModel()) {
     Card(
-        modifier = Modifier.padding(8.dp).pointerInput(Unit){
-            detectTapGestures (  onLongPress = {
-                taskViewModel.onItemRemove(task)
-            })
+        modifier = Modifier
+            .padding(8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(onLongPress = {
+                    taskViewModel.onItemRemove(task)
+                })
 
-        } ,
+            },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, color = primaryGreen),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),

@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
     implementation(libs.hilt.android)
+
+    implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.compose.icons)
     implementation(platform(libs.androidx.compose.bom))
@@ -59,6 +61,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+
+
     kapt(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
