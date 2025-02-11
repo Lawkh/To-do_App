@@ -139,7 +139,7 @@ fun TaskItem(task: TaskModel, taskViewModel: TaskViewModel = hiltViewModel()) {
             )
             Checkbox(
                 checked = task.selected,
-                onCheckedChange = { taskViewModel.onCheckBoxSelected(task) })
+                onCheckedChange = { taskViewModel.onCheckBoxSelected(task.copy(selected = it)) })
         }
     }
 }

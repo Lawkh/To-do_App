@@ -1,13 +1,15 @@
 package com.mmur.cursocompose.todoapp.addtasks.ui
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mmur.cursocompose.todoapp.addtasks.domain.useCases.AddTaskUseCase
+import com.mmur.cursocompose.todoapp.addtasks.domain.useCases.DeleteTaskUseCase
 import com.mmur.cursocompose.todoapp.addtasks.domain.useCases.GetTaskUseCase
-import com.mmur.cursocompose.todoapp.addtasks.ui.TaskUiState.*
+import com.mmur.cursocompose.todoapp.addtasks.ui.TaskUiState.Error
+import com.mmur.cursocompose.todoapp.addtasks.ui.TaskUiState.Loading
+import com.mmur.cursocompose.todoapp.addtasks.ui.TaskUiState.Success
 import com.mmur.cursocompose.todoapp.addtasks.ui.model.TaskModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class TaskViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     getTaskUseCase: GetTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
 ) : ViewModel() {
 
     val taskState: StateFlow<TaskUiState> =
@@ -62,14 +65,16 @@ class TaskViewModel @Inject constructor(
     }
 
     fun onCheckBoxSelected(task: TaskModel) {
-//        val index = _tasks.indexOf(task)
-//        _tasks[index] = _tasks[index].let {
-//            it.copy(selected = !it.selected)
-//        }
+        viewModelScope.launch {
+            addTaskUseCase(task)
+        }
+
     }
 
     fun onItemRemove(task: TaskModel) {
-//        _tasks.removeIf { it.id == task.id }
+        viewModelScope.launch {
+            deleteTaskUseCase(task)
+        }
     }
 
 
