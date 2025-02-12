@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ fun AddTaskDialog(show: Boolean, onDismiss: () -> Unit, onTaskAdded: (String) ->
                 Modifier
                     .padding(16.dp)
                     .clip(RoundedCornerShape(8F))
+                    .testTag("dialogCard")
             ) {
                 Column(
                     Modifier

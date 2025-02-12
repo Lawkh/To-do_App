@@ -16,7 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
-class TaskListTest {
+class AddTaskDialogTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
@@ -38,14 +38,19 @@ class TaskListTest {
     )
 
     @Test
-    fun myFirstTest(){
+    fun whenDialogTestReceivesTrue_thenShows(){
         composeTestRule.activity.setContent {
-            TasksList(data)
+            AddTaskDialog(true, onDismiss = { }, onTaskAdded = { })
         }
-        composeTestRule.onNodeWithText(data.first().task, ignoreCase = true).assertExists()
-        composeTestRule.onNodeWithTag("task_list").onChildren().assertCountEquals(data.size)
-        composeTestRule.onAllNodesWithTag("task_item").assertCountEquals(data.size)
+        composeTestRule.onNodeWithTag("dialogCard").assertExists()
+    }
 
+    @Test
+    fun whenDialogTestReceivesFalse_thenDoNotShow(){
+        composeTestRule.activity.setContent {
+            AddTaskDialog(false, onDismiss = { }, onTaskAdded = { })
+        }
+        composeTestRule.onNodeWithTag("dialogCard").assertDoesNotExist()
     }
 
 
