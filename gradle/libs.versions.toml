@@ -1,5 +1,7 @@
 [versions]
 agp = "8.8.0"
+hiltAndroidCompiler = "2.50"
+hiltAndroidTesting = "1.0.0-beta04"
 hiltNavigationCompose = "1.2.0"
 kotlin = "2.0.0"
 dagger = "2.50"
@@ -16,12 +18,18 @@ comSquareupInterceptor = "4.12.0"
 room = "2.6.1"
 hilt_android_x = "1.2.0"
 
+androidx-test = "1.6.2"
+androidx-test-core = "1.6.1"
+androidx-test-espresso = "3.6.1"
+androidx-test-ext-junit = "1.2.1"
+kotlinx-coroutines-test = "1.8.0"
+androidx-arch-testing = "2.2.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt_android_x" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -41,10 +49,38 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-android-test= { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+androidx-arch-core-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch-testing" }
+androidx-test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test-core" }
+androidx-test-espresso-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "androidx-test-espresso" }
+androidx-test-espresso-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+org-jetbrains-kotlinx-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
+[bundles]
+testing-android = [
+    "androidx-arch-core-core-testing",
+    "androidx-test-espresso-espresso-core",
+    "androidx-test-ext-junit",
+    "androidx-test-runner",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+
+]
+
+
+testing-unit = [
+    "androidx-arch-core-core-testing",
+    "androidx-test-core-ktx",
+    "androidx-test-espresso-espresso-contrib",
+    "androidx-test-espresso-espresso-core",
+    "org-jetbrains-kotlinx-kotlinx-coroutines-test",
+]
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
