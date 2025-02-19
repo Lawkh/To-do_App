@@ -10,6 +10,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -57,6 +59,7 @@ fun TasksScreen(taskViewModel: TaskViewModel, modifier: Modifier) {
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(16.dp)
+                        .semantics { contentDescription = "Add task" },
                 )
             }
         }

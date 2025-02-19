@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.livedata)
     implementation(libs.dagger)
+    testImplementation(libs.junit.jupiter)
     kapt(libs.dagger.compiler)
     implementation(libs.hilt.android)
 
